@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SC Quechua - Mein Konto</title>
+  <title>SC Quechua</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    #loginForm, #account { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
-    input { width: 100%; padding: 8px; margin: 10px 0; }
+    nav { display: flex; justify-content: flex-end; margin-bottom: 20px; }
     button { padding: 10px 20px; cursor: pointer; }
+    #loginForm, #account { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; display: none; }
+    input { width: 100%; padding: 8px; margin: 10px 0; }
     #logoutBtn { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>SC Quechua</h1>
-  <button id="meinKontoBtn">Mein Konto</button>
+  <nav>
+    <button id="meinKontoBtn">Mein Konto</button>
+  </nav>
 
-  <div id="loginForm" style="display:none;">
+  <h1>Willkommen beim SC Quechua</h1>
+  <p>Hier steht alles über unseren Verein, Mannschaften, Projekte und Spendenaktionen.</p>
+
+  <div id="loginForm">
     <h2>Login</h2>
     <input type="email" id="loginEmail" placeholder="Email" required>
     <input type="password" id="loginPassword" placeholder="Passwort" required>
@@ -24,7 +29,7 @@
     <p id="loginError" style="color:red;"></p>
   </div>
 
-  <div id="account" style="display:none;">
+  <div id="account">
     <h2>Mein Konto</h2>
     <p><strong>Name:</strong> <span id="fullName"></span></p>
     <p><strong>Mitglied seit:</strong> <span id="memberSince"></span></p>
@@ -34,7 +39,6 @@
   </div>
 
   <script type="module">
-    // Firebase SDKs einbinden
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -77,7 +81,6 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Verstecke Login, zeige Konto
         loginForm.style.display = 'none';
         account.style.display = 'block';
 
@@ -92,7 +95,6 @@
         }
       } else {
         account.style.display = 'none';
-        loginForm.style.display = 'block';
       }
     });
 
