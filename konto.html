@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SC Quechua – Konto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1110;
+      --panel:#101a18;
+      --accent:#2bd072;
+      --accent-2:#1aa85a;
+      --text:#e7f4ec;
+      --muted:#a9c7b7;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:18px;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, sans-serif; background: var(--bg); color: var(--text); display:flex; justify-content:center; align-items:center; height:100vh; }
+    .card { background: var(--panel); padding:32px; border-radius: var(--radius); box-shadow: var(--shadow); width:100%; max-width:400px; }
+    h1 { margin-top:0; font-size:1.8rem; margin-bottom:20px; }
+    input { width:100%; padding:12px; margin:8px 0; border-radius: var(--radius); border:none; background:#0d1715; color:var(--text); }
+    button { width:100%; padding:12px; margin-top:12px; border:none; border-radius:999px; background: var(--accent); color:#072a17; font-weight:600; cursor:pointer; }
+    button:hover { filter: brightness(1.05); }
+    .google-btn { background: #4285F4; color:#fff; display:flex; justify-content:center; align-items:center; gap:8px; }
+    .google-btn img { width:20px; height:20px; }
+    p { margin-top:12px; font-size:0.9rem; color:var(--muted); }
+    a { color: var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .error { color: var(--danger); font-weight:600; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Konto anmelden</h1>
+    <input type="email" id="email" placeholder="E-Mail">
+    <input type="password" id="password" placeholder="Passwort">
+    <button id="loginBtn">Anmelden</button>
+    <button class="google-btn" id="googleBtn">
+      <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google Logo"> Mit Google anmelden
+    </button>
+    <p>Noch kein Konto? <a href="#">Registrieren</a></p>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script>
+    // TODO: Dein Firebase-Konfigurationsobjekt hier einfügen
+    const firebaseConfig = {
+      apiKey: "DEIN_API_KEY",
+      authDomain: "DEIN_PROJECT_ID.firebaseapp.com",
+      projectId: "DEIN_PROJECT_ID",
+      storageBucket: "DEIN_PROJECT_ID.appspot.com",
+      messagingSenderId: "DEINE_SENDER_ID",
+      appId: "DEINE_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const loginBtn = document.getElementById("loginBtn");
+    const googleBtn = document.getElementById("googleBtn");
+    const errorMsg = document.getElementById("errorMsg");
+
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          window.location.href = "dashboard.html"; // Weiterleitung nach Login
+        })
+        .catch(error => {
+          errorMsg.textContent = error.message;
+        });
+    });
+
+    googleBtn.addEventListener("click", () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(result => {
+          window.location.href = "dashboard.html";
+        })
+        .catch(error => {
+          errorMsg.textContent = error.message;
+        });
+    });
+  </script>
+</body>
+</html>
