@@ -1,107 +1,340 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SC Quechua</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SC Quechua – Sport & Regenwaldschutz</title>
+  <meta name="description" content="Offizielle Vereinsseite des SC Quechua: Fußball, Streaming & 35% jeder Einnahme für den Schutz des Regenwalds (WWF)." />
+  <meta name="author" content="SC Quechua" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    nav { display: flex; justify-content: flex-end; margin-bottom: 20px; }
-    button { padding: 10px 20px; cursor: pointer; }
-    #loginForm, #account { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; display: none; }
-    input { width: 100%; padding: 8px; margin: 10px 0; }
-    #logoutBtn { margin-top: 20px; }
+    :root{
+      --bg:#0b1110;         /* sehr dunkles Grün/Anthrazit */
+      --panel:#101a18;      /* Panel-Hintergrund */
+      --accent:#2bd072;     /* Quechua-Grün */
+      --accent-2:#1aa85a;
+      --text:#e7f4ec;       /* fast weiß mit grünlichem Touch */
+      --muted:#a9c7b7;
+      --danger:#e14b4b;
+      --gold:#f3c969;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width:100%; height:auto; display:block; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .btn { display:inline-flex; align-items:center; gap:.6rem; border:1px solid transparent; padding:.85rem 1.1rem; border-radius: 999px; font-weight:600; background:var(--accent); color:#072a17; box-shadow: var(--shadow); transition: transform .08s ease, filter .2s ease; }
+    .btn:hover{ filter:brightness(1.05);} 
+    .btn.secondary{ background:transparent; border-color: #2f4c44; color: var(--text);}    
+    .tag { display:inline-block; padding:.3rem .7rem; border-radius:999px; border:1px solid #24433b; background:#0d1715; color:var(--muted); font-size:.85rem; }
+    header { position: sticky; top:0; z-index: 50; backdrop-filter: blur(8px); background: rgba(11,17,16,0.65); border-bottom:1px solid #1a2b26; }
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:.9rem 0; }
+    .logo { display:flex; align-items:center; gap:.7rem; font-weight:800; letter-spacing:.3px; }
+    .logo-mark { width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, var(--accent), var(--accent-2)); display:grid; place-items:center; color:#063920; font-weight:900; }
+    nav a { margin-left:1.1rem; font-weight:600; color:var(--text); opacity:.85; }
+    nav a:hover{ opacity:1; }
+    .mobile-toggle{ display:none; }
+
+    /* Hero */
+    .hero { padding: 64px 0 32px; position: relative; overflow:hidden; }
+    .hero::before{ content:""; position:absolute; inset:-20% -10% auto -10%; height: 420px; background: radial-gradient(700px 220px at 20% 0%, rgba(43,208,114,.25), transparent 60%), radial-gradient(600px 200px at 80% 0%, rgba(26,168,90,.18), transparent 60%); pointer-events:none; }
+    .hero-grid { display:grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items:center; }
+    .card { background: linear-gradient(180deg, rgba(25,39,35,.75), rgba(16,26,24,.75)); border:1px solid #20332e; border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    h1 { font-size: clamp(1.8rem, 3.2vw, 3rem); line-height:1.1; margin:0 0 10px; }
+    h2 { font-size: clamp(1.25rem, 2.1vw, 1.8rem); margin: 0 0 10px; }
+    p.lead { font-size: 1.05rem; color: var(--muted); }
+
+    /* Sections */
+    section { padding: 36px 0; }
+    .grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+    .grid-2 { display:grid; grid-template-columns: repeat(2, 1fr); gap:18px; }
+
+    /* List */
+    .list { list-style: none; padding:0; margin:.4rem 0 0; }
+    .list li { display:flex; align-items:flex-start; gap:.7rem; padding:.5rem 0; color: var(--muted); }
+    .list li b { color: var(--text); }
+
+    /* Table */
+    table { width:100%; border-collapse: collapse; }
+    th, td { text-align:left; padding: .75rem; border-bottom:1px solid #223630; }
+    th { color: var(--muted); font-weight:600; background:#0d1715; }
+
+    /* Footer */
+    footer { margin-top: 30px; padding: 26px 0 60px; border-top:1px solid #1a2b26; color: #9bb7aa; font-size:.95rem; }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      nav a { display:none; }
+      .mobile-toggle{ display:inline-flex; gap:.5rem; align-items:center; cursor:pointer; }
+      .mobile-menu{ display:none; border-top:1px solid #1a2b26; padding:.8rem 0 1rem; }
+      .mobile-menu a { display:block; padding:.6rem 0; }
+    }
   </style>
 </head>
 <body>
-  <nav>
-    <button id="meinKontoBtn">Mein Konto</button>
-  </nav>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true">SC</div>
+        <span>SC Quechua</span>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle" aria-controls="mobileMenu" aria-expanded="false" aria-label="Navigation umschalten">☰ Menü</div>
+      <nav>
+  <a href="#about">Über uns</a>
+  <a href="#teams">Teams</a>
+  <a href="#stream">Streamer</a>
+  <a href="#mitglied">Mitglied werden</a>
+  <a href="#spenden">Spenden</a>
+  <a href="#kontakt">Kontakt</a>
+  <a href="/konto" class="btn">Mein Konto</a>
+</nav>
 
-  <h1>Willkommen beim SC Quechua</h1>
-  <p>Hier steht alles über unseren Verein, Mannschaften, Projekte und Spendenaktionen.</p>
+    </div>
+    <div class="container mobile-menu" id="mobileMenu" role="region" aria-label="Mobile Navigation">
+      <a href="#about">Über uns</a>
+      <a href="#teams">Teams</a>
+      <a href="#stream">Streamer</a>
+      <a href="#mitglied">Mitglied werden</a>
+      <a href="#spenden">Spenden</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+  </header>
 
-  <div id="loginForm">
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Passwort" required>
-    <button id="loginBtn">Login</button>
-    <p id="loginError" style="color:red;"></p>
-  </div>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="card" style="padding:28px;">
+          <span class="tag">Seit 09/2022 · Sport & Umwelt</span>
+          <h1>SC Quechua – Sport verbindet, Regenwald bleibt.</h1>
+          <p class="lead">Wir sind ein junger Sportverein aus NRW. Gegründet im September 2022 (damals als <b>FC Quechua</b>), seit 11/2024 mit neuem Namen & Logo. <b>35% jeder Einnahme spenden wir an den WWF</b> für den Schutz des Regenwalds.</p>
+          <div style="display:flex; gap:.8rem; flex-wrap:wrap; margin-top:14px;">
+            <a class="btn" href="#mitglied">Mitglied werden</a>
+            <a class="btn secondary" href="#spenden">Jetzt spenden</a>
+          </div>
+          <ul class="list" style="margin-top:14px;">
+            <li>🌳 <b>Mission:</b> Aktiver Beitrag zum Regenwaldschutz (WWF).</li>
+            <li>⚽ <b>Teams:</b> Fußball (Aufbau) · eSport/Streaming (Vereins-Streamer).</li>
+            <li>👥 <b>Vorstand:</b> Jan Beckmann (Vorsitz) · Konrad Bergholz (GF).</li>
+          </ul>
+        </div>
+        <div class="card" aria-label="Hinweis" style="background:linear-gradient(180deg, rgba(35,58,49,.6), rgba(16,26,24,.85));">
+          <h2 style="margin-top:0;">Aktuelles</h2>
+          <ul class="list">
+            <li>🆕 <b>Namens-/Logo-Update:</b> Seit <b>November 2024</b> sind Name & Logo offiziell SC Quechua.</li>
+            <li>📝 <b>Eintragung:</b> Der Verein ist aktuell noch <b>nicht eingetragen</b> (e.V. in Planung).</li>
+            <li>📅 <b>Nächster Schritt Fußball:</b> Freizeitliga testen & Kader aufbauen.</li>
+            <li>📺 <b>Streamer gesucht:</b> Unser Vereins-Streamer begleitet Spiele & Events live.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-  <div id="account">
-    <h2>Mein Konto</h2>
-    <p><strong>Name:</strong> <span id="fullName"></span></p>
-    <p><strong>Mitglied seit:</strong> <span id="memberSince"></span></p>
-    <p><strong>Mitgliedsstatus:</strong> <span id="contractStatus"></span></p>
-    <p><strong>Mitgliedsbeitrag ausgesetzt bis:</strong> <span id="feeExempt"></span></p>
-    <button id="logoutBtn">Logout</button>
-  </div>
+    <!-- Über uns -->
+    <section id="about">
+      <div class="container grid-2">
+        <div class="card">
+          <h2>Über uns</h2>
+          <p>Der SC Quechua wurde im <b>September 2022</b> von fünf Jungs und zwei Mädchen gegründet – ursprünglich als <b>FC Quechua</b> mit anderem Logo. Aus einem Klassenfahrt-Witz über das Jackenlogo von Jans bestem Freund entstand die Idee: ein Verein, der <b>Sport</b> mit <b>Naturschutz</b> verbindet.</p>
+          <p>Seit <b>11/2024</b> treten wir mit neuem Namen & Zeichen auf. Wir sind derzeit noch <b>nicht als e.V.</b> eingetragen – der Schritt ist geplant.</p>
+        </div>
+        <div class="card">
+          <h2>Leitung</h2>
+          <ul class="list">
+            <li>👤 <b>Jan Beckmann</b> – Vorstandsvorsitzender seit 2022 (Ideengeber; Witz wurde Mission).</li>
+            <li>👤 <b>Konrad Bergholz</b> – Geschäftsführer seit 12/2024 (langjähriger Freund; 6 Jahre gemeinsames Gymnasium, 4 in einer Stufe, 2 in einer Klasse).</li>
+          </ul>
+          <div style="margin-top:10px;">
+            <span class="tag">Transparenz</span>
+            <p style="margin:.5rem 0 0; color:var(--muted)">Von jeder Einnahme spenden wir <b>35%</b> an den <b>WWF</b> für den Schutz des Regenwalds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    <!-- Teams -->
+    <section id="teams">
+      <div class="container">
+        <div class="card">
+          <h2>Teams & Abteilungen</h2>
+          <div class="grid-3">
+            <div>
+              <h3>⚽ Fußball</h3>
+              <p class="lead">Aufbau eines Freizeit-Kaders, mittelfristig Einstieg in den Ligabetrieb.</p>
+              <ul class="list">
+                <li>📍 Training: wird announced</li>
+                <li>👟 Ausrüstung: Trikots, Schienbeinschoner, Bälle</li>
+                <li>🎯 Ziel: Team formen · Testspiele · Sponsoren finden</li>
+              </ul>
+            </div>
+            <div>
+              <h3>🎮 eSport / FIFA</h3>
+              <p class="lead">Community-Turniere & Koop mit unserem Vereins-Streamer.</p>
+              <ul class="list">
+                <li>🗓️ Monats-Cup (online)</li>
+                <li>🏆 Charity: „5 € pro Tor für den Regenwald“</li>
+                <li>🤝 Sponsor-Overlays im Stream</li>
+              </ul>
+            </div>
+            <div>
+              <h3>📺 Media & Streaming</h3>
+              <p class="lead">Stories, Highlights & Live – damit alle dabei sind.</p>
+              <ul class="list">
+                <li>🎥 Spielberichte & Kurzinterviews</li>
+                <li>🔔 Event-Benachrichtigungen</li>
+                <li>💬 Community-Discord (optional)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    const firebaseConfig = {
-      apiKey: "DEIN_API_KEY",
-      authDomain: "DEIN_PROJECT.firebaseapp.com",
-      projectId: "DEIN_PROJECT",
-      storageBucket: "DEIN_PROJECT.appspot.com",
-      messagingSenderId: "DEIN_SENDER_ID",
-      appId: "DEIN_APP_ID"
-    };
+    <!-- Streamer -->
+    <section id="stream">
+      <div class="container grid-2">
+        <div class="card">
+          <h2>Vereins-Streamer</h2>
+          <p>Ein Vereinsmitglied ist kleiner Streamer und wird unser <b>digitaler Botschafter</b>. Er streamt Trainings, Interviews & Benefiz-Events. Spenden im Stream fließen gemäß unserer Regel in den Regenwaldschutz.</p>
+          <ul class="list">
+            <li>🖥️ Plattform: Twitch/YouTube</li>
+            <li>🧩 Sponsor-Einblendungen & Spendenziele</li>
+            <li>🌿 „Gaming for Good“: Events zugunsten WWF</li>
+          </ul>
+        </div>
+        <div class="card" aria-label="Stream-Preview">
+          <h2>Live-Preview (Platzhalter)</h2>
+          <div style="aspect-ratio:16/9; background:#0b1513; border:1px solid #233b33; border-radius:12px; display:grid; place-items:center; color:#79dca5;">
+            <div>
+              <div style="font-weight:700; font-size:1.1rem;">Stream-Player</div>
+              <div style="opacity:.8;">Hier könnte ein Twitch-/YouTube-Embed stehen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    <!-- Mitgliedschaft -->
+    <section id="mitglied">
+      <div class="container grid-2">
+        <div class="card">
+          <h2>Mitglied werden</h2>
+          <p class="lead">Werde Teil des SC Quechua. Gemeinsam für Sport & Regenwaldschutz.</p>
+          <table aria-label="Mitgliedsbeiträge">
+            <thead>
+              <tr><th>Beitrag</th><th>Leistung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>150 € / Jahr</b> (Erwachsene)</td><td>Teilnahme an Teams, Events & Community</td></tr>
+              <tr><td><span class="tag">Sonderregelungen möglich</span></td><td>Beitragsbefreiungen/Anpassungen nach Absprache</td></tr>
+              <tr><td>Kündigung</td><td>Monatlich zum Folgemonat möglich</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:.6rem; color:var(--muted)">Hinweis: Individuelle Absprachen (z. B. temporäre Beitragsbefreiung) werden schriftlich festgehalten.</p>
+          <div style="display:flex; gap:.8rem; flex-wrap:wrap; margin-top:12px;">
+            <a class="btn" href="mailto:jan.beckmann0309@gmail.com?subject=Mitglied%20werden%20%E2%80%93%20SC%20Quechua&body=Hallo%20SC%20Quechua%2C%20ich%20m%C3%B6chte%20Mitglied%20werden.%20Bitte%20sendet%20mir%20das%20Formular.%20">Formular anfordern</a>
+            <a class="btn secondary" href="#kontakt">Fragen? Schreib uns</a>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Transparenz & Regeln</h2>
+          <ul class="list">
+            <li>🌿 <b>35% aller Einnahmen</b> spenden wir an den <b>WWF</b> (Regenwaldschutz).</li>
+            <li>🔔 Mitglieder werden über <b>News & Veranstaltungen</b> benachrichtigt.</li>
+            <li>🛡️ Fair Play & respektvolles Miteinander als Grundprinzip.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-    const meinKontoBtn = document.getElementById('meinKontoBtn');
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    const account = document.getElementById('account');
-    const logoutBtn = document.getElementById('logoutBtn');
+    <!-- Spenden -->
+    <section id="spenden">
+      <div class="container grid-2">
+        <div class="card">
+          <h2>Spenden</h2>
+          <p class="lead">Jede Spende hilft doppelt: Sie stärkt unseren Verein und schützt den Regenwald.</p>
+          <ul class="list">
+            <li>🏦 <b>IBAN:</b> DE38 3345 0000 1024 8673 66</li>
+            <li>📌 Verwendungszweck: „Spende – SC Quechua“</li>
+            <li>📊 35% Weiterleitung an WWF · Rest für Vereinsarbeit</li>
+          </ul>
+          <p style="color:var(--muted); margin-top:.6rem">Auf Wunsch veröffentlichen wir regelmäßige Kurzberichte zur Mittelverwendung.</p>
+        </div>
+        <div class="card">
+          <h2>Weitere Zwecke (optional)</h2>
+          <p>Zusätzlich können wir soziale Projekte fördern (z. B. Tafeln, Kinderhilfe). Über Prozentanteile entscheidet die Mitgliederversammlung.</p>
+          <ul class="list">
+            <li>👶 Kinder & Bildung</li>
+            <li>🤝 Soziale Hilfe in der Region</li>
+            <li>🌊 Umwelt & Gewässerschutz</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-    meinKontoBtn.addEventListener('click', () => {
-      loginForm.style.display = 'block';
-      account.style.display = 'none';
-    });
+    <!-- Kontakt -->
+    <section id="kontakt">
+      <div class="container grid-2">
+        <div class="card">
+          <h2>Kontakt</h2>
+          <p class="lead">Fragen, Ideen, Zusammenarbeit? Schreib uns!</p>
+          <form onsubmit="event.preventDefault(); alert('Danke! Wir melden uns per E‑Mail.');" aria-label="Kontaktformular">
+            <label for="name">Name</label>
+            <input id="name" name="name" required placeholder="Dein Name" style="display:block;width:100%;margin:.35rem 0 1rem;padding:.8rem;border-radius:12px;border:1px solid #294840;background:#0d1715;color:var(--text)">
+            <label for="email">E‑Mail</label>
+            <input id="email" name="email" type="email" required placeholder="du@example.org" style="display:block;width:100%;margin:.35rem 0 1rem;padding:.8rem;border-radius:12px;border:1px solid #294840;background:#0d1715;color:var(--text)">
+            <label for="msg">Nachricht</label>
+            <textarea id="msg" name="msg" rows="4" required placeholder="Wie können wir helfen?" style="display:block;width:100%;margin:.35rem 0 1rem;padding:.8rem;border-radius:12px;border:1px solid #294840;background:#0d1715;color:var(--text)"></textarea>
+            <button class="btn" type="submit">Nachricht senden</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Vereinsangaben</h2>
+          <ul class="list">
+            <li>🏷️ <b>SC Quechua</b> (Gründung 09/2022)</li>
+            <li>ℹ️ Aktuell nicht eingetragen (e.V. in Planung)</li>
+            <li>👤 Vorstand: Jan Beckmann · Geschäftsführer: Konrad Bergholz</li>
+            <li>✉️ Kontakt: <a href="mailto:jan.beckmann0309@gmail.com">jan.beckmann0309@gmail.com</a></li>
+          </ul>
+          <div style="margin-top:10px;">
+            <span class="tag">Rechtliches</span>
+            <p style="margin:.5rem 0 0; color:var(--muted)">Impressum & Datenschutzerklärung folgen mit der Eintragung. Logo- und Namensrechte: SC Quechua.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    loginBtn.addEventListener('click', async () => {
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      loginError.textContent = '';
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        loginError.textContent = 'Fehler beim Login: ' + error.message;
-      }
-    });
+  <footer>
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:.8rem;">
+          <div class="logo-mark" aria-hidden="true" style="width:28px;height:28px;border-radius:8px;">SC</div>
+          <div>© <span id="year"></span> SC Quechua · Sport & Umwelt</div>
+        </div>
+        <div style="opacity:.8;">„Sport verbindet – Natur bleibt.“</div>
+      </div>
+    </div>
+  </footer>
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        loginForm.style.display = 'none';
-        account.style.display = 'block';
-
-        const docRef = doc(db, "members", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          document.getElementById('fullName').textContent = data.fullName;
-          document.getElementById('memberSince').textContent = new Date(data.memberSince.seconds * 1000).toLocaleDateString();
-          document.getElementById('contractStatus').textContent = data.contractStatus;
-          document.getElementById('feeExempt').textContent = new Date(data.membershipFeeExemptUntil.seconds * 1000).toLocaleDateString();
-        }
-      } else {
-        account.style.display = 'none';
-      }
-    });
-
-    logoutBtn.addEventListener('click', async () => {
-      await signOut(auth);
-      loginForm.style.display = 'block';
-      account.style.display = 'none';
+  <script>
+    // Jahr im Footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Mobile Nav
+    const t = document.getElementById('mobileToggle');
+    const m = document.getElementById('mobileMenu');
+    t && t.addEventListener('click', () => {
+      const open = m.style.display === 'block';
+      m.style.display = open ? 'none' : 'block';
+      t.setAttribute('aria-expanded', (!open).toString());
     });
   </script>
 </body>
