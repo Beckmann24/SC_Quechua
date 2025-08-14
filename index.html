@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SC Quechua - Mein Konto</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #loginForm, #account { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+    input { width: 100%; padding: 8px; margin: 10px 0; }
+    button { padding: 10px 20px; cursor: pointer; }
+    #logoutBtn { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>SC Quechua</h1>
+  <button id="meinKontoBtn">Mein Konto</button>
+
+  <div id="loginForm" style="display:none;">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" required>
+    <input type="password" id="loginPassword" placeholder="Passwort" required>
+    <button id="loginBtn">Login</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+  <div id="account" style="display:none;">
+    <h2>Mein Konto</h2>
+    <p><strong>Name:</strong> <span id="fullName"></span></p>
+    <p><strong>Mitglied seit:</strong> <span id="memberSince"></span></p>
+    <p><strong>Mitgliedsstatus:</strong> <span id="contractStatus"></span></p>
+    <p><strong>Mitgliedsbeitrag ausgesetzt bis:</strong> <span id="feeExempt"></span></p>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script type="module">
+    // Firebase SDKs einbinden
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "DEIN_API_KEY",
+      authDomain: "DEIN_PROJECT.firebaseapp.com",
+      projectId: "DEIN_PROJECT",
+      storageBucket: "DEIN_PROJECT.appspot.com",
+      messagingSenderId: "DEIN_SENDER_ID",
+      appId: "DEIN_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const meinKontoBtn = document.getElementById('meinKontoBtn');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const account = document.getElementById('account');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    meinKontoBtn.addEventListener('click', () => {
+      loginForm.style.display = 'block';
+      account.style.display = 'none';
+    });
+
+    loginBtn.addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      loginError.textContent = '';
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        loginError.textContent = 'Fehler beim Login: ' + error.message;
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Verstecke Login, zeige Konto
+        loginForm.style.display = 'none';
+        account.style.display = 'block';
+
+        const docRef = doc(db, "members", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById('fullName').textContent = data.fullName;
+          document.getElementById('memberSince').textContent = new Date(data.memberSince.seconds * 1000).toLocaleDateString();
+          document.getElementById('contractStatus').textContent = data.contractStatus;
+          document.getElementById('feeExempt').textContent = new Date(data.membershipFeeExemptUntil.seconds * 1000).toLocaleDateString();
+        }
+      } else {
+        account.style.display = 'none';
+        loginForm.style.display = 'block';
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      loginForm.style.display = 'block';
+      account.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
